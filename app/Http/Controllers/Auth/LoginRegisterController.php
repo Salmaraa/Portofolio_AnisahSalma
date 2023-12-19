@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailJob;
 use App\Models\User;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class LoginRegisterController extends Controller
 {
@@ -36,6 +38,7 @@ class LoginRegisterController extends Controller
             'password'=> \Illuminate\Support\Facades\Hash::make($request->password)
         ]);
 
+        
         $credentials = $request->only('email', 'password');
         Auth::attempt($credentials);
         $request->session()->regenerate();

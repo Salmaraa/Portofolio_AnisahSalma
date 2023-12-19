@@ -164,21 +164,38 @@
         </div>
     </section>
 
-    <!-- contact  -->
+    <!-- contact section design -->
     <section class="contact" id="contact">
         <h2 class="heading">Contact <span>Me!</span></h2>
 
         <form action="#">
             <div class="input-box">
-                <input type="text" placeholder="Full Name">
-                <input type="email" placeholder="Email Address">
+                <div class="input-filed field">
+                    <input type="text" placeholder="Full Name" id="name" class="item" autocomplete="off">
+                    <div class="error-txt">Full Name can't be blank</div>
+                </div>
+                <div class="input-field field">
+                    <input type="text" placeholder="Email Address" id="email" class="item" autocomplete="off">
+                    <div class="error-txt email">Email Address can't be blank</div>
+                </div>
             </div>
             <div class="input-box">
-                <input type="number" placeholder="Mobile Number">
-                <input type="text" placeholder="Email Subject">
+                <div class="input-filed field">
+                    <input type="text" placeholder="Phone Number" id="phone" class="item" autocomplete="off">
+                    <div class="error-txt">Phone Number can't be blank</div>
+                </div>
+                <div class="input-field field">
+                    <input type="text" placeholder="Subject" id="subject" class="item" autocomplete="off">
+                    <div class="error-txt">Subject can't be blank</div>
+                </div>
             </div>
-            <textarea name="" id="" cols="30" rows="10" placeholder="Your Message"></textarea>
-            <input type="submit" value="Send Message" class="btn">
+
+            <div class="textarea-field field">
+                <textarea name="" id="message" cols="30" rows="10" placeholder="Your Message" class="item" autocomplete="off"></textarea>
+                <div class="error-txt">Message can't be blank</div>
+            </div>
+
+           <button type="submit">Send Message</button>
         </form>
     </section>
 
@@ -203,6 +220,10 @@
 
     <!-- custom js -->
     <script src="js/script.js"></script>
+
+    <!-- send email -->
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
