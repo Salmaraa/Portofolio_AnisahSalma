@@ -3,11 +3,17 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\SendEmailJob;
 use App\Models\User;
+use App\Mail\RegistrationEmail;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+//use App\Http\Controllers\Auth\Mail;
+use App\Jobs\SendEmailJob;
+
+
+
 
 
 class LoginRegisterController extends Controller
@@ -24,26 +30,53 @@ class LoginRegisterController extends Controller
         return view('auth.register');
     }
 
+
     public function store(Request $request)
     {
         $request->validate([
             'name'=> 'required|string|max:250',
             'email'=> 'required|email|max:250|unique:users',
-            'password'=> 'required|min:8|confirmed'
+            'password'=> 'required|min:8|confirmed',
+            'photo'=>'image|nullable|max:1999'
         ]);
 
-        User::create([
+        if($request->hasFile('photo')){
+            $filenameWithExt = $request->file('photo')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('photo')->getClientOriginalExtension();
+            $filenameSimpan = $filename . '_' . time() . '.' . $extension;
+            $path = $request->file('photo')->storeAs('photos/original', $filenameSimpan);
+        }
+
+        $user = User::create([
             'name'=> $request->name,
             'email'=>$request->email,
-            'password'=> \Illuminate\Support\Facades\Hash::make($request->password)
+            'password'=> \Illuminate\Support\Facades\Hash::make($request->password),
+            'photo'=>$path
+
         ]);
 
+        // Mengirim email
+        $this->sendRegistrationEmail($user);
         
         $credentials = $request->only('email', 'password');
         Auth::attempt($credentials);
         $request->session()->regenerate();
         return redirect()->route('dashboard')
             ->withSuccess('You have succesfully registered & loggedin!');
+    }
+
+    private function sendRegistrationEmail(User $user){
+        $data = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'password' => '********',
+        ];
+    
+        $subject = 'Registration Successful';
+    
+        // Mengirim email menggunakan Laravel Mail
+        // Mail::to($user->email)->send(new RegistrationEmail($data, $subject));
     }
 
     public function login()

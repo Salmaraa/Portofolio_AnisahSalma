@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginRegisterController;
+use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,4 +27,19 @@ Route::controller(LoginRegisterController::class)->group(function() {
     Route::post('/authenticate', 'authenticate')->name('authenticate');
     Route::get('/dashboard', 'dashboard')->name('dashboard');
     Route::get('/logout', 'logout')->name('logout');
+});
+
+Route::get('/users', [UserController::class, 'index'])->name('users');
+Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+Route::patch('/users/{user}', [UserController::class, 'update'])->name('users.update');
+Route::get('/users/{user}/resize', [UserController::class, 'resizeForm'])->name('resizeForm');
+Route::post('/users/{user}/resize', [UserController::class, 'resizeImage'])->name('resizeImage');
+
+
+Route::resource('gallery', GalleryController::class);
+
+
+Route::get('/coba', function () {
+    return view('gallery.create');
 });
